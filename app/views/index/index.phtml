@@ -1,0 +1,28 @@
+<?php use Phalcon\Tag; ?>
+
+<?= $this->tag->form('weather') ?>
+
+<table>
+    <tr>
+        <td><label for='city'>Город:</label></td>
+        <td><?= $this->tag->textField('city') ?></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>или по координатам</td>
+    </tr>
+    <tr>
+        <td><label for='lon'>Lon:</label></td>
+        <td><?= $this->tag->textField('lon') ?></td>
+    </tr>
+    <tr>
+        <td><label for='lat'>Lat:</label></td>
+        <td><?= $this->tag->textField('lat') ?></td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+        <td><?= $this->tag->submitButton('Показать') ?></td>
+    </tr>
+</table>
+
+<?= $this->tag->endForm() ?>
