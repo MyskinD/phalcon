@@ -1,6 +1,9 @@
 <?php
 
 use App\Services\WeatherService;
+use App\Repositories\OpenWeatherMap;
+use App\Validations\Validation;
+use Exception;
 
 class WeatherController extends \Phalcon\Mvc\Controller
 {
@@ -8,11 +11,16 @@ class WeatherController extends \Phalcon\Mvc\Controller
     {
         $inputData = $this->request->getPost();
 
-        $service = new WeatherService();
-        $result = $service->getWeather($inputData);
+        try {
+            $weatherService = new WeatherService(new OpenWeatherMap(), new Validation());
+            $result = $weatherService->getWeather($inputData);
 
+            dd($result);
+
+        } catch (Exception $exception) {
+            echo $exception->getMessage();
+            die;
+        }
 
     }
-
-
 }

@@ -3,41 +3,49 @@
 namespace App\Services;
 
 use App\Validations\Validation;
+use App\Repositories\WeatherInterface;
+use Exception;
 
 class WeatherService extends \Phalcon\DI\Injectable
 {
     /** @var Validation  */
     protected $validation;
 
+    /** @var WeatherInterface  */
+    protected $weather;
+
     /**
      * WeatherService constructor.
+     * @param WeatherInterface $weather
+     * @param Validation $validation
      */
-    public function __construct()
-    {
-        $this->validation = new Validation();
+    public function __construct(
+        WeatherInterface $weather,
+        Validation $validation
+    ) {
+        $this->validation = $validation;
+        $this->weather = $weather;
     }
 
     /**
      * @param array $data
      * @return array
+     * @throws Exception
      */
     public function getWeather(array $data): array
     {
-        /**TODO there will be validation */
+        $this->validation->isNotNullIncomingData($data);
+        $this->validation->isCorrectCityName($data);
+        $this->validation->isCorrectCoords($data);
 
-        $apiRequest = 'http://api.openweathermap.org/data/2.5/weather?';
+        $output = null;
         if ($data['city']) {
-            $apiRequest .= 'q=' . $data['city'];
-        } else if ($data['lon'] && $data['lat']) {
-            $apiRequest .= 'lat=' . $data['lat'] . '&lon=' . $data['lon'];
+            $output = $this->weather->findByCity($data['city']);
+        } else if ($data['lat'] && $data['lon']) {
+            $output = $this->weather->findByCoords($data['lat'], $data['lon']);
         }
+        $output = json_decode($output, true);
 
-        $apiRequest .= '&APPID=' . $this->config->api->key;
-
-        $info = file_get_contents($apiRequest);
-
-        dd(json_decode($info, true));
-
-        return $data;
+        return $output;
     }
 }

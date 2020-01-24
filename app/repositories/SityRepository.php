@@ -2,7 +2,7 @@
 
 namespace app\repositories;
 
-class SitiesRepository
+class SityRepository
 {
 
 }
