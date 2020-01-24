@@ -3,6 +3,7 @@
 namespace app\repositories;
 
 use App\Repositories\WeatherInterface;
+use App\Repositories\WeatherDTO;
 
 class OpenWeatherMap extends \Phalcon\DI\Injectable implements WeatherInterface
 {
@@ -23,9 +24,9 @@ class OpenWeatherMap extends \Phalcon\DI\Injectable implements WeatherInterface
 
     /**
      * @param string $city
-     * @return bool|mixed|string
+     * @return \App\Repositories\WeatherDTO
      */
-    public function findByCity(string $city)
+    public function findByCity(string $city): WeatherDTO
     {
         $url = $this->http . 'q=' . $city . $this->appId;
 
@@ -35,9 +36,9 @@ class OpenWeatherMap extends \Phalcon\DI\Injectable implements WeatherInterface
     /**
      * @param string $lat
      * @param string $lon
-     * @return bool|mixed|string
+     * @return \App\Repositories\WeatherDTO
      */
-    public function findByCoords(string $lat, string $lon)
+    public function findByCoords(string $lat, string $lon): WeatherDTO
     {
         $url = $this->http . 'lat=' . $lat . '&lon=' . $lon . $this->appId;
 
@@ -46,16 +47,31 @@ class OpenWeatherMap extends \Phalcon\DI\Injectable implements WeatherInterface
 
     /**
      * @param string $url
-     * @return bool|string
+     * @return \App\Repositories\WeatherDTO
      */
-    public function getWeather(string $url)
+    public function getWeather(string $url): WeatherDTO
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $output = curl_exec($ch);
+        $output = json_decode(curl_exec($ch), true);
         curl_close($ch);
 
-        return $output;
+        $dto = new WeatherDTO();
+        $dto->coord = $output['coord'];
+        $dto->weather = $output['weather'];
+        $dto->base = $output['base'];
+        $dto->main = $output['main'];
+        $dto->visibility = $output['visibility'];
+        $dto->wind = $output['wind'];
+        $dto->clouds = $output['clouds'];
+        $dto->dt = $output['dt'];
+        $dto->sys = $output['sys'];
+        $dto->timezone = $output['timezone'];
+        $dto->id = $output['id'];
+        $dto->name = $output['name'];
+        $dto->cod = $output['cod'];
+
+        return $dto;
     }
 }

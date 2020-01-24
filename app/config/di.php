@@ -3,6 +3,7 @@
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Mvc\Url as UrlProvider;
 use Phalcon\Mvc\View;
+use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 
 /** Create a DI */
 $di = new FactoryDefault();

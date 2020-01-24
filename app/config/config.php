@@ -5,8 +5,8 @@ use Phalcon\Config;
 return new Config([
     'database' => [
         'adapter'  => 'Mysql',
-        'host'     => 'localhost',
-        'port'     => 3306,
+        'host'     => '127.0.0.1',
+        'port'     => '3306',
         'username' => 'myskin',
         'password' => '123',
         'dbname'   => 'phalcon',

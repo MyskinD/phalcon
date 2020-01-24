@@ -2,13 +2,14 @@
 
 namespace App\Services;
 
-use App\Validations\Validation;
+use App\Validations\WeatherValidation;
 use App\Repositories\WeatherInterface;
+use App\Repositories\WeatherDTO;
 use Exception;
 
 class WeatherService extends \Phalcon\DI\Injectable
 {
-    /** @var Validation  */
+    /** @var WeatherValidation  */
     protected $validation;
 
     /** @var WeatherInterface  */
@@ -17,11 +18,11 @@ class WeatherService extends \Phalcon\DI\Injectable
     /**
      * WeatherService constructor.
      * @param WeatherInterface $weather
-     * @param Validation $validation
+     * @param WeatherValidation $validation
      */
     public function __construct(
         WeatherInterface $weather,
-        Validation $validation
+        WeatherValidation $validation
     ) {
         $this->validation = $validation;
         $this->weather = $weather;
@@ -29,10 +30,10 @@ class WeatherService extends \Phalcon\DI\Injectable
 
     /**
      * @param array $data
-     * @return array
+     * @return WeatherDTO
      * @throws Exception
      */
-    public function getWeather(array $data): array
+    public function getWeather(array $data): WeatherDTO
     {
         $this->validation->isNotNullIncomingData($data);
         $this->validation->isCorrectCityName($data);
@@ -41,10 +42,9 @@ class WeatherService extends \Phalcon\DI\Injectable
         $output = null;
         if ($data['city']) {
             $output = $this->weather->findByCity($data['city']);
-        } else if ($data['lat'] && $data['lon']) {
+        } else {
             $output = $this->weather->findByCoords($data['lat'], $data['lon']);
         }
-        $output = json_decode($output, true);
 
         return $output;
     }

@@ -3,8 +3,9 @@
 namespace App\Validations;
 
 use Exception;
+use InvalidArgumentException;
 
-class Validation
+class WeatherValidation
 {
     /**
      * @param array $data
@@ -13,7 +14,7 @@ class Validation
     public function isNotNullIncomingData(array $data): void
     {
         if (!($data['lon'] && $data['lat']) && !$data['city']) {
-            throw new Exception('City name or its coordinates should not be empty');
+            throw new InvalidArgumentException('City name or its coordinates should not be empty');
         }
     }
 
@@ -25,7 +26,7 @@ class Validation
     {
         $pattern = '/^[A-Za-zА-Яа-яЁё-]+$/ism';
         if ($data['city'] && !preg_match($pattern, $data['city'])) {
-            throw new Exception('Enter the correct field `CITY`');
+            throw new InvalidArgumentException('Enter the correct field `CITY`');
         }
     }
 
@@ -40,9 +41,7 @@ class Validation
             throw new Exception('Enter the correct field `LON`');
         }
         if (!$data['city'] && $data['lat'] && !preg_match($pattern, $data['lat'])) {
-            throw new Exception('Enter the correct field `LAT`');
+            throw new InvalidArgumentException('Enter the correct field `LAT`');
         }
     }
-
-
 }
