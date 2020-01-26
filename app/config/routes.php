@@ -8,5 +8,9 @@ $router->add('/weather',
     [
         'controller' => 'weather',
         'action' => 'index'
+    ],
+    [
+        'controller' => 'city',
+        'action' => 'index'
     ]
 );

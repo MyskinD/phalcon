@@ -22,8 +22,12 @@ return new Config([
         'validationsDir' => APP_PATH . '/validations/',
         'baseUri' => '/',
     ],
-    'api' => [
+    'openWeatherMap' => [
+        'http' => 'http://api.openweathermap.org/data/2.5/weather?',
         'key' => '1bd9d367265508c055f503da60b63c44'
+    ],
+    'yandexSpeller' => [
+        'http' => 'https://speller.yandex.net/services/spellservice.json/checkText?text='
     ]
 ]);
 

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use app\repositories\SpellerInterface;
 use App\Validations\WeatherValidation;
 use App\Repositories\WeatherInterface;
 use App\Repositories\WeatherDTO;
@@ -15,17 +16,23 @@ class WeatherService extends \Phalcon\DI\Injectable
     /** @var WeatherInterface  */
     protected $weather;
 
+    /** @var SpellerInterface  */
+    protected $speller;
+
     /**
      * WeatherService constructor.
      * @param WeatherInterface $weather
      * @param WeatherValidation $validation
+     * @param SpellerInterface $speller
      */
     public function __construct(
         WeatherInterface $weather,
-        WeatherValidation $validation
+        WeatherValidation $validation,
+        SpellerInterface $speller
     ) {
         $this->validation = $validation;
         $this->weather = $weather;
+        $this->speller = $speller;
     }
 
     /**
@@ -39,13 +46,13 @@ class WeatherService extends \Phalcon\DI\Injectable
         $this->validation->isCorrectCityName($data);
         $this->validation->isCorrectCoords($data);
 
-        $output = null;
         if ($data['city']) {
-            $output = $this->weather->findByCity($data['city']);
+            $cityName = $this->speller->spellByCity($data['city']);
+            $weatherInfo = $this->weather->findByCity($cityName);
         } else {
-            $output = $this->weather->findByCoords($data['lat'], $data['lon']);
+            $weatherInfo = $this->weather->findByCoords($data['lat'], $data['lon']);
         }
 
-        return $output;
+        return $weatherInfo;
     }
 }

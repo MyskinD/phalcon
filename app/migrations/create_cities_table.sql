@@ -1,7 +1,7 @@
 CREATE TABLE `cities` (
-  `id` INT(11) NOT NULL,
+  `id` INT NOT NULL,
   `name` VARCHAR(45) NOT NULL,
-  `lat` VARCHAR(20) NOT NULL,
-  `lon` VARCHAR(20) NOT NULL,
-  `create_at` INT(11) NOT NULL,
+  `lat` DECIMAL(10,8) NOT NULL,
+  `lon` DECIMAL(11,8) NOT NULL,
+  `create_at` DATETIME NOT NULL,
   PRIMARY KEY (`id`));

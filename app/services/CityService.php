@@ -26,4 +26,12 @@ class CityService extends \Phalcon\DI\Injectable
     {
         $this->cityRepository->add($dto);
     }
+
+    /**
+     * @return array
+     */
+    public function getCities(): array
+    {
+        return $this->cityRepository->all();
+    }
 }

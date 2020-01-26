@@ -1,0 +1,18 @@
+<?php foreach ($cities as $city) : ?>
+
+<table>
+    <tr>
+        <td>Город</td>
+        <td>Lat</td>
+        <td>Lon</td>
+        <td>Дата</td>
+    </tr>
+    <tr>
+        <td><?=$city['name']?></td>
+        <td><?=$city['lat']?></td>
+        <td><?=$city['lon']?></td>
+        <td><?=$city['create_at']?></td>
+    </tr>
+</table>
+
+<?php endforeach; ?>

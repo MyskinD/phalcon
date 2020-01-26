@@ -18,4 +18,12 @@ class CityRepository
         $city->date = date('Y-m-d H:i:s', $dto->dt);
         $city->save();
     }
+
+    /**
+     * @return array
+     */
+    public function all(): array
+    {
+        return \Cities::find();
+    }
 }

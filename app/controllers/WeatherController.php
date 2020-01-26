@@ -1,13 +1,15 @@
 <?php
 
+use Phalcon\Mvc\Controller;
 use App\Services\WeatherService;
 use App\Services\CityService;
 use App\Repositories\OpenWeatherMap;
+use App\Repositories\YandexSpeller;
 use App\Validations\WeatherValidation;
 use App\Repositories\CityRepository;
 use Exception;
 
-class WeatherController extends \Phalcon\Mvc\Controller
+class WeatherController extends Controller
 {
     public function indexAction()
     {
@@ -15,20 +17,20 @@ class WeatherController extends \Phalcon\Mvc\Controller
 
         try {
             $weatherService = new WeatherService(
-                new OpenWeatherMap(),
-                new WeatherValidation()
+                new OpenWeatherMap(
+                    $this->config->openWeatherMap->http,
+                    $this->config->openWeatherMap->key
+                ),
+                new WeatherValidation(),
+                new YandexSpeller($this->config->yandexSpeller->http)
             );
             $weatherResult = $weatherService->getWeather($inputData);
-            if ($weatherResult) {
-                (new CityService(new CityRepository()))->createCity($weatherResult);
-            }
+            (new CityService(new CityRepository()))->createCity($weatherResult);
 
-            dd($weatherResult);
 
         } catch (Exception $exception) {
             echo $exception->getMessage();
             die;
         }
-
     }
 }

@@ -4,8 +4,9 @@ namespace app\repositories;
 
 use App\Repositories\WeatherInterface;
 use App\Repositories\WeatherDTO;
+use InvalidArgumentException;
 
-class OpenWeatherMap extends \Phalcon\DI\Injectable implements WeatherInterface
+class OpenWeatherMap implements WeatherInterface
 {
     /** @var string  */
     protected $http;
@@ -15,11 +16,13 @@ class OpenWeatherMap extends \Phalcon\DI\Injectable implements WeatherInterface
 
     /**
      * OpenWeatherMap constructor.
+     * @param $http
+     * @param $key
      */
-    public function __construct()
+    public function __construct(string $http, string $key)
     {
-        $this->http = 'http://api.openweathermap.org/data/2.5/weather?';
-        $this->appId = '&APPID=' . $this->config->api->key;
+        $this->http = $http;
+        $this->appId = '&APPID=' . $key;
     }
 
     /**
@@ -28,7 +31,8 @@ class OpenWeatherMap extends \Phalcon\DI\Injectable implements WeatherInterface
      */
     public function findByCity(string $city): WeatherDTO
     {
-        $url = $this->http . 'q=' . $city . $this->appId;
+        $format = '%sq=%s%s';
+        $url = sprintf($format, $this->http, $city, $this->appId);
 
         return $this->getWeather($url);
     }
@@ -40,7 +44,8 @@ class OpenWeatherMap extends \Phalcon\DI\Injectable implements WeatherInterface
      */
     public function findByCoords(string $lat, string $lon): WeatherDTO
     {
-        $url = $this->http . 'lat=' . $lat . '&lon=' . $lon . $this->appId;
+        $format = '%slat=%s&lon=%s%s';
+        $url = sprintf($format, $this->http, $lat, $lon, $this->appId);
 
         return $this->getWeather($url);
     }
@@ -49,13 +54,17 @@ class OpenWeatherMap extends \Phalcon\DI\Injectable implements WeatherInterface
      * @param string $url
      * @return \App\Repositories\WeatherDTO
      */
-    public function getWeather(string $url): WeatherDTO
+    protected function getWeather(string $url): WeatherDTO
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $output = json_decode(curl_exec($ch), true);
         curl_close($ch);
+
+        if ($output['cod'] === '404') {
+            throw new InvalidArgumentException($output['message']);
+        }
 
         $dto = new WeatherDTO();
         $dto->coord = $output['coord'];

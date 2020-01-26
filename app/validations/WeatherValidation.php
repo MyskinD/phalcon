@@ -2,7 +2,6 @@
 
 namespace App\Validations;
 
-use Exception;
 use InvalidArgumentException;
 
 class WeatherValidation
@@ -38,7 +37,7 @@ class WeatherValidation
     {
         $pattern = '/^[\d]{2}\.[\d]+$/ism';
         if (!$data['city'] && $data['lon'] && !preg_match($pattern, $data['lon'])) {
-            throw new Exception('Enter the correct field `LON`');
+            throw new InvalidArgumentException('Enter the correct field `LON`');
         }
         if (!$data['city'] && $data['lat'] && !preg_match($pattern, $data['lat'])) {
             throw new InvalidArgumentException('Enter the correct field `LAT`');

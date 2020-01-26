@@ -16,10 +16,4 @@ interface WeatherInterface
      * @return mixed
      */
     public function findByCoords(string $lat, string $lon);
-
-    /**
-     * @param string $url
-     * @return mixed
-     */
-    public function getWeather(string $url);
 }
