@@ -27,15 +27,20 @@ class YandexSpeller implements SpellerInterface
     {
         $format = '%s%s';
         $url = sprintf($format, $this->http, $name);
+        $cityName = $this->spellChecking($url);
 
-        return $this->spellChecking($url);
+        if (!$cityName) {
+            return $name;
+        }
+
+        return $cityName;
     }
 
     /**
      * @param string $url
-     * @return string
+     * @return mixed
      */
-    protected function spellChecking(string $url): string
+    protected function spellChecking(string $url)
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -43,12 +48,6 @@ class YandexSpeller implements SpellerInterface
         $output = array_shift(json_decode(curl_exec($ch), true));
         curl_close($ch);
 
-        if (!$output) {
-            throw new InvalidArgumentException('city not found');
-        }
-
         return array_shift($output['s']);
     }
-
-
 }
