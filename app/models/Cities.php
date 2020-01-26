@@ -32,7 +32,7 @@ class Cities extends Model
 
     /**
      * @var datetime
-     * @Column(type="decimal", nullanle = false)
+     * @Column(type="datetime", nullanle = false)
      */
     public $date;
 }

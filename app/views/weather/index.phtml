@@ -1,0 +1,92 @@
+<h3>Сисемные данные</h3>
+
+<table>
+    <tr>
+        <td>Страна</td>
+        <td><?=$weather->sys['country']?></td>
+    </tr>
+    <tr>
+        <td>Город</td>
+        <td><?=$weather->name?></td>
+    </tr>
+    <tr>
+        <td>Восход</td>
+        <td><?=date('Y-m-d H:i:s', $weather->sys['sunrise']);?></td>
+    </tr>
+    <tr>
+        <td>Заход</td>
+        <td><?=date('Y-m-d H:i:s', $weather->sys['sunset']);?></td>
+    </tr>
+    <tr>
+        <td>Дата запроса</td>
+        <td><?=date('Y-m-d H:i:s', $weather->dt);?></td>
+    </tr>
+</table>
+
+<h3>Координаты</h3>
+
+<table>
+    <tr>
+        <td>LON</td>
+        <td><?=$weather->coord['lon']?></td>
+    </tr>
+    <tr>
+        <td>LAT</td>
+        <td><?=$weather->coord['lat']?></td>
+    </tr>
+</table>
+
+<h3>Погода</h3>
+
+<table>
+    <tr>
+        <td>Основное</td>
+        <td><?=array_shift($weather->weather)['main']?></td>
+    </tr>
+    <tr>
+        <td>Описание</td>
+        <td><?=array_shift($weather->weather)['description']?></td>
+    </tr>
+</table>
+
+<h3>Главное</h3>
+
+<table>
+    <tr>
+        <td>Температура, K</td>
+        <td><?=$weather->main['temp']?></td>
+    </tr>
+    <tr>
+        <td>Ощущается, K</td>
+        <td><?=$weather->main['feels_like']?></td>
+    </tr>
+    <tr>
+        <td>Минисально, K</td>
+        <td><?=$weather->main['temp_min']?></td>
+    </tr>
+    <tr>
+        <td>Максимально, K</td>
+        <td><?=$weather->main['temp_max']?></td>
+    </tr>
+    <tr>
+        <td>Давление</td>
+        <td><?=$weather->main['pressure']?></td>
+    </tr>
+    <tr>
+        <td>Влажность</td>
+        <td><?=$weather->main['humidity']?></td>
+    </tr>
+</table>
+
+<h3>Ветер</h3>
+
+<table>
+    <tr>
+        <td>Скорость</td>
+        <td><?=$weather->wind['speed']?></td>
+    </tr>
+    <tr>
+        <td>Градусы</td>
+        <td><?=$weather->wind['deg']?></td>
+    </tr>
+</table>

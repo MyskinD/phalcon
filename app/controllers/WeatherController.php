@@ -26,11 +26,11 @@ class WeatherController extends Controller
             );
             $weatherResult = $weatherService->getWeather($inputData);
             (new CityService(new CityRepository()))->createCity($weatherResult);
-
-
         } catch (Exception $exception) {
             echo $exception->getMessage();
             die;
         }
+
+        $this->view->setVar('weather', $weatherResult);
     }
 }
